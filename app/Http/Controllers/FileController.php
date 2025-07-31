@@ -3,63 +3,38 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\File;
 
 class FileController extends Controller
 {
-    public function upload(Request $request)
-    {
-        // Dummy response
-        return redirect()->back()->with('notification', 'Upload berhasil (dummy)');
-    }
-
     public function index()
     {
-        // Dummy data file
-        $files = [
-            (object)[
-                'id' => 1,
-                'name' => 'Contoh File 1.pdf',
-                'description' => 'Ini adalah file PDF contoh.',
-                'tags' => ['dokumen', 'pdf']
-            ],
-            (object)[
-                'id' => 2,
-                'name' => 'Gambar Kucing.png',
-                'description' => 'Gambar kucing lucu.',
-                'tags' => ['gambar', 'kucing']
-            ],
-            (object)[
-                'id' => 3,
-                'name' => 'Data.xlsx',
-                'description' => 'File data excel.',
-                'tags' => ['data', 'excel']
-            ]
-        ];
+        $files = File::latest()->get();
         return view('files', compact('files'));
     }
 
-    public function share($file, Request $request)
+    public function upload(Request $request)
     {
-        // Dummy link
-        $link = url('/shared-link/'.$file.'-dummy-link');
-        return redirect()->route('files.index')->with('share_link', $link);
+        $request->validate([
+            'file' => 'required|file|max:25600', // max 25MB
+        ]);
+
+        $path = $request->file('file')->store('files', 'public');
+
+        $file = new File();
+        $file->user_id = auth()->id(); // nullable jika tidak login
+        $file->filename = $request->file('file')->getClientOriginalName();
+        $file->path = $path;
+        $file->save();
+
+        return redirect()->back()->with('success', 'File berhasil diupload!');
     }
 
-    public function destroy($file)
+    public function share(Request $request, $fileId)
     {
-        // Dummy response
-        return redirect()->route('files.index')->with('notification', 'File berhasil dihapus (dummy)');
-    }
-
-    public function download($file)
-    {
-        // Dummy response
-        return response('Download dummy file: '.$file);
-    }
-
-    public function requestAccess($file)
-    {
-        // Dummy response
-        return redirect()->back()->with('notification', 'Permintaan akses ulang sudah dikirim (dummy)');
+        $file = \App\Models\File::findOrFail($fileId);
+        $shareLink = asset('storage/' . $file->path);
+        session()->flash('share_link_' . $file->id, $shareLink);
+        return redirect()->back();
     }
 }
