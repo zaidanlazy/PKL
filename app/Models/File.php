@@ -8,10 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class File extends Model
 {
     use HasFactory;
-
+    
     protected $fillable = [
         'user_id',
         'filename',
         'path',
+        'share_link',
+        'original_name',
+        'category',
+        'description'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
