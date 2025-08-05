@@ -1,61 +1,65 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Badak LNG </title>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Badak LNG</title>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=roboto:400,500,600,700&display=swap" rel="stylesheet">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=roboto:300,400,500,600,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.bunny.net/css?family=poppins:500,600,700&display=swap" rel="stylesheet">
 
-        <style>
+    <style>
         /* ===== Base Styles ===== */
         :root {
-            --primary: #1a73e8;
-            --primary-dark: #0d5bcf;
-            --secondary: #34a853;
-            --accent: #fbbc05;
-            --danger: #ea4335;
-            --text-primary: #202124;
-            --text-secondary: #5f6368;
-            --bg-primary: #ffffff;
-            --bg-secondary: #f5f5f5;
-            --border: #dadce0;
-            --shadow-sm: 0 1px 2px rgba(60,64,67,0.08);
-            --shadow-md: 0 1px 3px rgba(60,64,67,0.15);
+            --primary: #0066CC;
+            --primary-light: #E6F2FF;
+            --primary-dark: #0052A3;
+            --secondary: #00A859;
+            --accent: #FFC107;
+            --danger: #E53935;
+            --warning: #F39C12;
+            --info: #17A2B8;
+            --text-primary: #2D3748;
+            --text-secondary: #718096;
+            --text-tertiary: #A0AEC0;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --bg-tertiary: #EDF2F7;
+            --border: #E2E8F0;
+            --border-dark: #CBD5E0;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --radius-full: 9999px;
+            --transition: all 0.2s ease-in-out;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
             font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
             background-color: var(--bg-secondary);
             color: var(--text-primary);
-            overflow-x: hidden;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* ===== Splash Screen Animation ===== */
-        .splash-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--primary);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            animation: fadeOut 0.5s ease-out 2.5s forwards;
-        }
-
+        
         .logo-animation {
-            width: 150px;
-            height: 150px;
+            width: 120px;
+            height: 120px;
             position: relative;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .logo-circle {
@@ -63,9 +67,8 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            border: 8px solid transparent;
-            border-top-color: white;
-            animation: spin 1.5s linear infinite;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            animation: pulse 2s ease-in-out infinite;
         }
 
         .logo-inner {
@@ -74,42 +77,53 @@
             height: 80%;
             top: 10%;
             left: 10%;
-            border-radius: 50%;
+            border-radius: var(--radius-full);
             background-color: white;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
         }
 
         .logo-inner img {
-            width: 70%;
+            width: 60%;
             height: auto;
-            animation: pulse 1.5s ease-in-out infinite;
+            transition: var(--transition);
+        }
+
+        .loading-container {
+            width: 160px;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+            margin-top: 24px;
+        }
+
+        .loading-bar {
+            height: 100%;
+            width: 0;
+            background-color: white;
+            animation: loading 2s ease-in-out forwards;
         }
 
         .loading-text {
             color: white;
             font-size: 18px;
             font-weight: 500;
-            margin-top: 20px;
-            opacity: 0;
-            animation: fadeIn 0.5s ease-out 0.5s forwards;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            margin-top: 16px;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: 0.5px;
         }
 
         @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        @keyframes loading {
+            0% { width: 0; }
+            100% { width: 100%; }
         }
 
         @keyframes fadeOut {
@@ -119,9 +133,9 @@
 
         /* ===== Header Styles ===== */
         .app-header {
-            height: 80px;
+            height: 70px;
             background-color: var(--bg-primary);
-            box-shadow: var(--shadow-md);
+            box-shadow: var(--shadow-sm);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -143,29 +157,25 @@
         .branding {
             display: flex;
             align-items: center;
-            gap: 16px;
-            transition: transform 0.3s ease;
+            gap: 12px;
+            text-decoration: none;
+            transition: var(--transition);
         }
 
         .branding:hover {
-            transform: translateX(5px);
+            opacity: 0.9;
         }
 
         .logo-wrapper {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: var(--bg-primary);
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            background-color: white;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: var(--shadow-sm);
             overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .logo-wrapper:hover {
-            transform: rotate(15deg) scale(1.1);
+            box-shadow: var(--shadow-sm);
         }
 
         .logo-wrapper img {
@@ -175,140 +185,90 @@
         }
 
         .app-name {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 600;
             color: var(--primary);
             margin: 0;
-            position: relative;
+            font-family: 'Poppins', sans-serif;
         }
 
-        .app-name::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 3px;
-            background-color: var(--primary);
-            transition: width 0.3s ease;
-        }
-
-        .branding:hover .app-name::after {
-            width: 100%;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 15px;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-        }
-
-        .nav-link {
-            padding: 10px 20px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 15px;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(26, 115, 232, 0.1), transparent);
-            transition: all 0.5s ease;
-        }
-
-        .nav-link:hover::before {
-            left: 100%;
-        }
-
-        .nav-link:hover {
-            background-color: rgba(26, 115, 232, 0.05);
-        }
-
-        .nav-link.primary {
-            background-color: var(--primary);
-            color: white;
-            box-shadow: 0 2px 8px rgba(26, 115, 232, 0.3);
-        }
-
-        .nav-link.primary:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.4);
-        }
-
-        .nav-icon {
-            width: 18px;
-            height: 18px;
+        .app-name span {
+            font-weight: 400;
+            color: var(--text-secondary);
         }
 
         /* ===== Main Content Styles ===== */
         .main-content {
             max-width: 1400px;
-            margin: 30px auto;
+            margin: 24px auto;
             padding: 0 24px;
-            padding-bottom: 100px; /* Added space for floating button */
+            padding-bottom: 100px;
         }
 
         .content-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .page-title {
             font-size: 24px;
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text-primary);
             margin: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* ===== File Table Styles ===== */
+        .file-container {
+            background-color: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
         }
 
         .file-table {
             width: 100%;
             border-collapse: collapse;
-            background-color: var(--bg-primary);
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
         }
 
         .file-table thead {
             background-color: var(--bg-secondary);
-            border-bottom: 1px solid var(--border);
         }
 
         .file-table th {
-            padding: 12px 16px;
+            padding: 14px 16px;
             text-align: left;
             font-weight: 500;
             color: var(--text-secondary);
-            font-size: 14px;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .file-table th:first-child {
+            padding-left: 24px;
+            border-top-left-radius: var(--radius-lg);
+        }
+
+        .file-table th:last-child {
+            padding-right: 24px;
+            border-top-right-radius: var(--radius-lg);
         }
 
         .file-table td {
-            padding: 12px 16px;
+            padding: 14px 16px;
             border-bottom: 1px solid var(--border);
             vertical-align: middle;
+        }
+
+        .file-table td:first-child {
+            padding-left: 24px;
+        }
+
+        .file-table td:last-child {
+            padding-right: 24px;
         }
 
         .file-table tr:last-child td {
@@ -316,35 +276,122 @@
         }
 
         .file-table tr:hover {
-            background-color: rgba(26, 115, 232, 0.05);
+            background-color: var(--bg-tertiary);
         }
 
         .file-name {
             display: flex;
             align-items: center;
             gap: 12px;
-            font-weight: 500;
+        }
+
+        .file-icon-container {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            background-color: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .file-icon {
-            width: 24px;
-            height: 24px;
-            color: var(--text-secondary);
+            width: 20px;
+            height: 20px;
+            color: var(--primary);
+        }
+
+        .file-title {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .file-path {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
         }
 
         .file-owner {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .owner-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: var(--radius-full);
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .file-modified, .file-size {
             color: var(--text-secondary);
             font-size: 14px;
         }
 
-        .file-modified {
-            color: var(--text-secondary);
+        .file-action {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
             font-size: 14px;
+            transition: var(--transition);
         }
 
-        .file-size {
+        .file-action:hover {
+            text-decoration: underline;
+            opacity: 0.9;
+        }
+
+        /* ===== Empty State ===== */
+        .empty-state {
+            padding: 48px 24px;
+            text-align: center;
+        }
+
+        .empty-state-icon {
+            width: 80px;
+            height: 80px;
+            color: var(--text-tertiary);
+            margin-bottom: 16px;
+        }
+
+        .empty-state-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .empty-state-description {
             color: var(--text-secondary);
-            font-size: 14px;
+            max-width: 400px;
+            margin: 0 auto 16px;
+        }
+
+        /* ===== Success Message ===== */
+        .alert-success {
+            background-color: #E6FFFA;
+            border-left: 4px solid #38B2AC;
+            color: #234E52;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alert-success svg {
+            width: 20px;
+            height: 20px;
+            color: #38B2AC;
         }
 
         /* ===== Floating Action Button ===== */
@@ -358,41 +405,42 @@
         .fab {
             width: 56px;
             height: 56px;
-            border-radius: 50%;
+            border-radius: var(--radius-full);
             background-color: var(--primary);
             color: white;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.4);
+            box-shadow: var(--shadow-lg);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             position: relative;
         }
 
         .fab:hover {
             background-color: var(--primary-dark);
-            transform: scale(1.1);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 102, 204, 0.2);
         }
 
         .fab-icon {
             font-size: 24px;
-            transition: transform 0.3s ease;
+            font-weight: 300;
         }
 
         .fab-options {
             position: absolute;
             bottom: 70px;
             right: 0;
-            width: 200px;
+            width: 220px;
             background-color: white;
-            border-radius: 8px;
-            box-shadow: var(--shadow-md);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
             overflow: hidden;
             opacity: 0;
             visibility: hidden;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
+            transform: translateY(10px);
+            transition: var(--transition);
         }
 
         .fab-options.active {
@@ -407,52 +455,47 @@
             align-items: center;
             gap: 12px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: var(--transition);
         }
 
         .fab-option:hover {
-            background-color: rgba(26, 115, 232, 0.1);
+            background-color: var(--bg-secondary);
         }
 
         .fab-option-icon {
             width: 20px;
             height: 20px;
-            color: var(--text-secondary);
+            color: var(--primary);
         }
 
         .fab-option-text {
             font-size: 14px;
             color: var(--text-primary);
+            font-weight: 500;
         }
 
         /* ===== Responsive Styles ===== */
         @media (max-width: 768px) {
-            .app-header {
-                height: 70px;
-            }
-            
             .header-container {
                 padding: 0 16px;
             }
             
-            .logo-wrapper {
-                width: 45px;
-                height: 45px;
-            }
-            
-            .app-name {
-                font-size: 20px;
-            }
-            
-            .nav-link {
-                padding: 8px 16px;
-                font-size: 14px;
-            }
-
             .file-table th, .file-table td {
-                padding: 10px 12px;
+                padding: 12px;
             }
-
+            
+            .file-table th:first-child, .file-table td:first-child {
+                padding-left: 16px;
+            }
+            
+            .file-table th:last-child, .file-table td:last-child {
+                padding-right: 16px;
+            }
+            
+            .file-modified {
+                display: none;
+            }
+            
             .fab-container {
                 bottom: 20px;
                 right: 20px;
@@ -461,258 +504,109 @@
 
         @media (max-width: 576px) {
             .app-name {
+                font-size: 18px;
+            }
+            
+            .file-owner-name {
                 display: none;
             }
             
-            .nav-link span {
-                display: none;
-            }
-            
-            .nav-link {
-                padding: 10px;
-                border-radius: 50%;
-                width: 40px;
-                height: 40px;
-                justify-content: center;
-            }
-            
-            .nav-icon {
-                width: 20px;
-                height: 20px;
-                margin: 0;
-            }
-
-            .file-table {
-                display: block;
-                overflow-x: auto;
-            }
-
-            .fab-options {
-                width: 180px;
+            .file-size {
+                font-size: 12px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Splash Screen with Animated Logo -->
-    <div class="splash-screen">
-        <div class="logo-animation">
-            <div class="logo-circle"></div>
-            <div class="logo-inner">
-                <img src="{{ asset('images/badaklng.png') }}" alt="Badak LNG Logo">
-                                        </div>
-        </div>
-        <div class="loading-text"> Badak LNG </div>
-                                    </div>
-
     <!-- Main Header -->
     <header class="app-header">
         <div class="header-container">
             <a href="/" class="branding">
                 <div class="logo-wrapper">
                     <img src="{{ asset('images/badaklng.png') }}" alt="Badak LNG Logo">
-                                </div>
-                <h1 class="app-name">Badak LNG </h1>
+                </div>
+                <h1 class="app-name">Badak <span>LNG</span></h1>
             </a>
-            
-            <nav>
-                <ul class="nav-links">
-                    @auth
-                        <li class="nav-item">
-                            <a href="{{ url('/profile') }}" class="nav-link">
-                                <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
-                                <span>Profile</span>
-                            </a>
-                        </li>
-                    @else
-                        <li class="nav-item">
-                            <a href="{{ route('login') }}" class="nav-link">
-                                <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
-                                </svg>
-                                <span>Log In</span>
-                            </a>
-                        </li>
-                        @if (Route::has('register'))
-                            <li class="nav-item">
-                                <a href="{{ route('register') }}" class="nav-link primary">
-                                    <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
-                                    </svg>
-                                    <span>Register</span>
-                                </a>
-                            </li>
-                        @endif
-                    @endauth
-                </ul>
-            </nav>
         </div>
     </header>
 
     <!-- Main Content -->
     <main class="main-content">
         <div class="content-header">
-            <h2 class="page-title">My file</h2>
-                                </div>
+            <h2 class="page-title">My Files</h2>
+        </div>
 
-        <table class="file-table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Owner</th>
-                    <th>Last modified</th>
-                    <th>File size</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <div class="file-name">
-                            <svg class="file-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                            Classroom
-                        </div>
-                    </td>
-                    <td class="file-owner">me</td>
-                    <td class="file-modified">Jul 22, 2024</td>
-                    <td class="file-size">-</td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="file-name">
-                            <svg class="file-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                            Foto
-                        </div>
-                    </td>
-                    <td class="file-owner">me</td>
-                    <td class="file-modified">Jun 13, 2025</td>
-                    <td class="file-size">-</td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="file-name">
-                            <svg class="file-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                            Game
-                        </div>
-                    </td>
-                    <td class="file-owner">me</td>
-                    <td class="file-modified">Mar 29, 2025</td>
-                    <td class="file-size">-</td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="file-name">
-                            <svg class="file-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                            serifikat zaidan
-                        </div>
-                    </td>
-                    <td class="file-owner">me</td>
-                    <td class="file-modified">Dec 3, 2024</td>
-                    <td class="file-size">-</td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="file-name">
-                            <svg class="file-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                            1 cylinder
-                        </div>
-                    </td>
-                    <td class="file-owner">me</td>
-                    <td class="file-modified">Feb 24, 2025</td>
-                    <td class="file-size">396 KB</td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="file-name">
-                            <svg class="file-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                            Contoh Tugas Ide dan Inovasi - Muchamad A Sofyannur Ofii
-                        </div>
-                    </td>
-                    <td class="file-owner">me</td>
-                    <td class="file-modified">Aug 3, 2024</td>
-                    <td class="file-size">2 KB</td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="file-name">
-                            <svg class="file-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                            Contoh Tugas Ide dan Inovasi - Muchamad A Sofyannur Ofii
-                        </div>
-                    </td>
-                    <td class="file-owner">me</td>
-                    <td class="file-modified">Aug 3, 2024</td>
-                    <td class="file-size">2 KB</td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="file-name">
-                            <svg class="file-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                            Contoh Tugas Ide dan Inovasi - Muchamad A Sofyannur Ofii
-                        </div>
-                    </td>
-                    <td class="file-owner">me</td>
-                    <td class="file-modified">Aug 3, 2024</td>
-                    <td class="file-size">2 KB</td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="file-name">
-                            <svg class="file-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                            databases kampus
+        @if(session('success'))
+            <div class="alert-success">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>{{ session('success') }}</span>
+            </div>
+        @endif
+
+        <div class="file-container">
+            <table class="file-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Owner</th>
+                        <th>Last Modified</th>
+                        <th>File Size</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($files as $file)
+                        <tr>
+                            <td>
+                                <div class="file-name">
+                                    <div class="file-icon-container">
+                                        <svg class="file-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="file-title">{{ $file->filename ?? 'Unnamed File' }}</div>
+                                        <div class="file-path">/My Files</div>
+                                    </div>
                                 </div>
-                    </td>
-                    <td class="file-owner">me</td>
-                    <td class="file-modified">Oct 14, 2024</td>
-                    <td class="file-size">85 KB</td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="file-name">
-                            <svg class="file-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            Gambar pohon
-                            </div>
-                    </td>
-                    <td class="file-owner">me</td>
-                    <td class="file-modified">Apr 14, 2025</td>
-                    <td class="file-size">305 KB</td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="file-name">
-                            <svg class="file-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            IMG_20250117_104744.jpg
-                        </div>
-                    </td>
-                    <td class="file-owner">me</td>
-                    <td class="file-modified">Jan 17, 2025</td>
-                    <td class="file-size">1.1 MB</td>
-                </tr>
-            </tbody>
-        </table>
-                    </main>
+                            </td>
+                            <td>
+                                <div class="file-owner">
+                                    <div class="owner-avatar">ME</div>
+                                    <span class="file-owner-name">me</span>
+                                </div>
+                            </td>
+                            <td class="file-modified">{{ \Carbon\Carbon::parse($file->created_at)->format('M d, Y') }}</td>
+                            <td class="file-size">
+                                @if($file->path && \Storage::disk('public')->exists($file->path))
+                                    {{ number_format(Storage::disk('public')->size($file->path) / 1024, 2) }} KB
+                                @else
+                                    -
+                                @endif
+                            </td>
+                            <td>
+                                <a href="{{ route('files.download', $file->id) }}" class="file-action">
+                                    Download
+                                </a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="empty-state">
+                                <svg class="empty-state-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                                </svg>
+                                <h3 class="empty-state-title">No files found</h3>
+                                <p class="empty-state-description">Upload your first file by clicking the + button below</p>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </main>
 
     <!-- Floating Action Button -->
     <div class="fab-container">
@@ -757,29 +651,28 @@
             const fab = document.getElementById('fab');
             const fabOptions = document.getElementById('fab-options');
 
-            fab.addEventListener('click', () => {
+            fab.addEventListener('click', (e) => {
+                e.stopPropagation();
                 fabOptions.classList.toggle('active');
             });
 
             // Close FAB options when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!fab.contains(e.target)) {
-                    fabOptions.classList.remove('active');
-                }
+            document.addEventListener('click', () => {
+                fabOptions.classList.remove('active');
             });
         });
 
         function uploadFile() {
             window.location.href = '{{ route("upload") }}';
         }
-
+        
         function saveFile() {
             window.location.href = '{{ route("save-file") }}';
         }
-
+          
         function openTrash() {
             window.location.href = '{{ route("trash") }}';
         }
     </script>
-    </body>
+</body>
 </html>

@@ -4,59 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\File;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class FileController extends Controller
 {
-    public function index()
+    public function welcome()
     {
         $files = File::latest()->get();
-        return view('files', compact('files'));
-    }
-
-    public function upload(Request $request)
-    {
-        $request->validate([
-            'file' => 'required|file|max:25600', // 25MB max
-            'filename' => 'nullable|string|max:255',
-            'share_link' => 'required|in:public,private,password,request'
-        ]);
-
-        $file = $request->file('file');
-        $customFilename = $request->input('filename');
-        $shareLink = $request->input('share_link');
-        
-        // Generate unique filename
-        $originalName = $file->getClientOriginalName();
-        $extension = $file->getClientOriginalExtension();
-        $filename = $customFilename ? $customFilename . '.' . $extension : $originalName;
-        
-        // Store file
-        $path = $file->storeAs('files', $filename, 'public');
-        
-        // Save to database
-        $fileModel = \App\Models\File::create([
-            'user_id' => auth()->id(),
-            'filename' => $filename,
-            'path' => $path,
-            'share_link' => $shareLink,
-            'original_name' => $originalName
-        ]);
-
-        // Generate share link
-        $shareUrl = route('files.download', $fileModel->id);
-        
-        // Flash the share link to session
-        session()->flash('uploaded_file_link', $shareUrl);
-        session()->flash('uploaded_file_name', $filename);
-        session()->flash('uploaded_file_privacy', $shareLink);
-
-        return redirect()->back()->with('success', 'File berhasil diupload! Link share telah dibuat.');
+        return view('welcome', compact('files'));
     }
 
     public function save(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|max:25600', // 25MB max
+            'file' => 'required|file|max:25600',
             'filename' => 'nullable|string|max:255',
             'category' => 'nullable|string|max:50',
             'description' => 'nullable|string|max:500'
@@ -66,68 +28,111 @@ class FileController extends Controller
         $customFilename = $request->input('filename');
         $category = $request->input('category');
         $description = $request->input('description');
-        
-        // Generate unique filename
+
         $originalName = $file->getClientOriginalName();
         $extension = $file->getClientOriginalExtension();
         $filename = $customFilename ? $customFilename . '.' . $extension : $originalName;
-        
-        // Store file
+
         $path = $file->storeAs('files', $filename, 'public');
-        
-        // Save to database
-        $fileModel = \App\Models\File::create([
-            'user_id' => auth()->id(),
+
+        File::create([
+            'user_id' => null,
             'filename' => $filename,
             'path' => $path,
-            'share_link' => 'private', // Default private for saved files
+            'share_link' => 'private',
             'original_name' => $originalName,
             'category' => $category,
-            'description' => $description
+            'description' => $description,
         ]);
 
-        return redirect()->back()->with('success', 'File berhasil disimpan ke penyimpanan Anda!');
+        return redirect('/')->with('success', 'File berhasil disimpan!');
+    }
+
+    public function upload(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|max:25600',
+            'filename' => 'nullable|string|max:255',
+            'password' => 'nullable|string|max:255',
+            'expired_date' => 'nullable|date',
+            'custom_link' => 'nullable|string|max:255',
+            'one_time' => 'nullable|in:on'
+        ]);
+
+        $file = $request->file('file');
+        $customFilename = $request->input('filename');
+        $password = $request->input('password');
+        $expiredDate = $request->input('expired_date') ?? now()->addYear();
+        $oneTime = $request->has('one_time');
+        $customLink = $request->input('custom_link');
+
+        // Tentukan share link secara otomatis
+        $shareLink = 'private'; // default
+        if ($password) $shareLink = 'password';
+        elseif ($customLink) $shareLink = 'public';
+        elseif ($oneTime) $shareLink = 'private';
+
+        $originalName = $file->getClientOriginalName();
+        $extension = $file->getClientOriginalExtension();
+        $filename = $customFilename ? $customFilename . '.' . $extension : $originalName;
+
+        $path = $file->storeAs('files', $filename, 'public');
+
+        $fileModel = File::create([
+            'user_id' => null,
+            'filename' => $filename,
+            'path' => $path,
+            'share_link' => $shareLink,
+            'original_name' => $originalName,
+            'password' => $password,
+            'expired_at' => Carbon::parse($expiredDate),
+            'one_time' => $oneTime,
+            'custom_link' => $customLink
+        ]);
+
+        $shareUrl = $customLink
+            ? url('/files/' . $customLink . '/download')
+            : route('files.download', $fileModel->id);
+
+        session()->flash('uploaded_file_link', $shareUrl);
+        session()->flash('uploaded_file_name', $filename);
+        session()->flash('uploaded_file_privacy', $shareLink);
+
+        return redirect()->back()->with('success', 'File berhasil diupload! Link share telah dibuat.');
+    }
+
+    public function download($fileIdOrCustomLink)
+    {
+        $file = File::where('id', $fileIdOrCustomLink)
+                    ->orWhere('custom_link', $fileIdOrCustomLink)
+                    ->firstOrFail();
+
+        if (!file_exists(storage_path('app/public/' . $file->path))) {
+            abort(404, 'File not found');
+        }
+
+        return response()->download(storage_path('app/public/' . $file->path), $file->filename);
     }
 
     public function share(Request $request, $fileId)
     {
-        $file = \App\Models\File::findOrFail($fileId);
+        $file = File::findOrFail($fileId);
         $shareLink = asset('storage/' . $file->path);
         session()->flash('share_link_' . $file->id, $shareLink);
         return redirect()->back();
     }
 
-    public function download($fileId)
-    {
-        $file = File::findOrFail($fileId);
-        
-        // Check if file exists
-        if (!file_exists(storage_path('app/public/' . $file->path))) {
-            abort(404, 'File not found');
-        }
-        
-        // For now, allow all downloads (you can add privacy checks here later)
-        return response()->download(storage_path('app/public/' . $file->path), $file->filename);
-    }
-
     public function deletePermanent($fileId)
     {
         $file = File::findOrFail($fileId);
-        
-        // Check if user owns the file
-        if ($file->user_id !== auth()->id()) {
-            return redirect()->back()->with('error', 'You do not have permission to delete this file.');
-        }
-        
+
         try {
-            // Delete physical file
             if (file_exists(storage_path('app/public/' . $file->path))) {
                 unlink(storage_path('app/public/' . $file->path));
             }
-            
-            // Delete from database
+
             $file->delete();
-            
+
             return redirect()->back()->with('success', 'File has been permanently deleted.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to delete file. Please try again.');
