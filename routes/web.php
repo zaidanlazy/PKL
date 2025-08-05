@@ -66,4 +66,7 @@ Route::put('/profile', fn() => back()->with('success', 'Profile updated successf
 // Update password dummy
 Route::put('/password', fn() => back()->with('success', 'Password changed successfully!'))->name('password.update');
 
+Route::post('/files/{id}/check-password', [FileController::class, 'checkPassword'])->name('files.check-password');
+
+
 // Tidak perlu require auth.php jika tidak menggunakan auth

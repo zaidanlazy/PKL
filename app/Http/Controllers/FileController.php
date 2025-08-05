@@ -101,18 +101,34 @@ class FileController extends Controller
         return redirect()->back()->with('success', 'File berhasil diupload! Link share telah dibuat.');
     }
 
-    public function download($fileIdOrCustomLink)
-    {
-        $file = File::where('id', $fileIdOrCustomLink)
-                    ->orWhere('custom_link', $fileIdOrCustomLink)
-                    ->firstOrFail();
+ public function download(Request $request, $fileIdOrCustomLink)
+{
+    $file = File::where('id', $fileIdOrCustomLink)
+                ->orWhere('custom_link', $fileIdOrCustomLink)
+                ->firstOrFail();
 
-        if (!file_exists(storage_path('app/public/' . $file->path))) {
-            abort(404, 'File not found');
+    if ($file->share_link === 'password') {
+        if (!$request->has('access_granted')) {
+            return view('files.password', ['file' => $file]);
         }
 
-        return response()->download(storage_path('app/public/' . $file->path), $file->filename);
+        // masukan password 
+        $inputPassword = $request->input('password_input');
+
+
+        if ($inputPassword !== $file->password) {
+            return back()->withErrors(['password_input' => 'Password salah!']);
+        }
     }
+
+    if (!file_exists(storage_path('app/public/' . $file->path))) {
+        abort(404, 'File tidak ditemukan.');
+    }
+
+    return response()->download(storage_path('app/public/' . $file->path), $file->filename);
+}
+
+
 
     public function share(Request $request, $fileId)
     {
@@ -138,4 +154,17 @@ class FileController extends Controller
             return redirect()->back()->with('error', 'Failed to delete file. Please try again.');
         }
     }
+
+    public function checkPassword(Request $request, $id)
+{
+    $file = File::findOrFail($id);
+
+    if ($request->input('password') === $file->password) {
+        // Redirect ke download dengan akses granted
+        return redirect()->route('files.download', ['fileIdOrCustomLink' => $file->custom_link ?? $file->id, 'access_granted' => true]);
+    }
+
+    return back()->withErrors(['password' => 'Password salah'])->withInput();
+}
+
 }

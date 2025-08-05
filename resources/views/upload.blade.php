@@ -27,13 +27,7 @@
                     <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
                         <label for="file" class="block text-sm font-medium text-gray-700 mb-2">Pilih File</label>
                         <input type="file" id="file" name="file" class="block w-full text-sm" required>
-                        <p class="text-xs text-gray-500 mt-2">Maksimal 25MB. Format bebas.</p>
-                    </div>
-
-                    <!-- Nama File -->
-                    <div>
-                        <label for="filename" class="block text-sm font-medium text-gray-700 mb-2">Nama File (opsional)</label>
-                        <input type="text" id="filename" name="filename" class="w-full px-3 py-2 border rounded-lg" placeholder="Masukkan nama file (tanpa ekstensi)">
+                        <p class="text-xs text-gray-500 mt-2">Maksimal 100MB. Format bebas.</p>
                     </div>
 
                     <!-- Password (opsional) -->
