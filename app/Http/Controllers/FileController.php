@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\File;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Session;
 
 class FileController extends Controller
 {
@@ -25,24 +26,19 @@ class FileController extends Controller
         ]);
 
         $file = $request->file('file');
-        $customFilename = $request->input('filename');
-        $category = $request->input('category');
-        $description = $request->input('description');
-
-        $originalName = $file->getClientOriginalName();
-        $extension = $file->getClientOriginalExtension();
-        $filename = $customFilename ? $customFilename . '.' . $extension : $originalName;
+        $filename = $request->input('filename')
+            ? $request->input('filename') . '.' . $file->getClientOriginalExtension()
+            : $file->getClientOriginalName();
 
         $path = $file->storeAs('files', $filename, 'public');
 
         File::create([
-            'user_id' => null,
             'filename' => $filename,
             'path' => $path,
-            'share_link' => 'private',
-            'original_name' => $originalName,
-            'category' => $category,
-            'description' => $description,
+            'original_name' => $file->getClientOriginalName(),
+            'category' => $request->input('category'),
+            'description' => $request->input('description'),
+            'share_link' => 'private'
         ]);
 
         return redirect('/')->with('success', 'File berhasil disimpan!');
@@ -56,43 +52,37 @@ class FileController extends Controller
             'password' => 'nullable|string|max:255',
             'expired_date' => 'nullable|date',
             'custom_link' => 'nullable|string|max:255',
-            'one_time' => 'nullable|in:on'
+            'one_time' => 'nullable|in:on',
+            'one_time_view' => 'nullable|in:on'
         ]);
 
         $file = $request->file('file');
-        $customFilename = $request->input('filename');
-        $password = $request->input('password');
-        $expiredDate = $request->input('expired_date') ?? now()->addYear();
-        $oneTime = $request->has('one_time');
-        $customLink = $request->input('custom_link');
-
-        // Tentukan share link secara otomatis
-        $shareLink = 'private'; // default
-        if ($password) $shareLink = 'password';
-        elseif ($customLink) $shareLink = 'public';
-        elseif ($oneTime) $shareLink = 'private';
-
-        $originalName = $file->getClientOriginalName();
-        $extension = $file->getClientOriginalExtension();
-        $filename = $customFilename ? $customFilename . '.' . $extension : $originalName;
+        $filename = $request->input('filename')
+            ? $request->input('filename') . '.' . $file->getClientOriginalExtension()
+            : $file->getClientOriginalName();
 
         $path = $file->storeAs('files', $filename, 'public');
 
+        $shareLink = 'private';
+        if ($request->filled('password')) $shareLink = 'password';
+        elseif ($request->filled('custom_link')) $shareLink = 'public';
+
         $fileModel = File::create([
-            'user_id' => null,
             'filename' => $filename,
             'path' => $path,
-            'share_link' => $shareLink,
-            'original_name' => $originalName,
-            'password' => $password,
-            'expired_at' => Carbon::parse($expiredDate),
-            'one_time' => $oneTime,
-            'custom_link' => $customLink
+            'original_name' => $file->getClientOriginalName(),
+            'password' => $request->input('password'),
+            'expired_at' => $request->input('expired_date') ?? now()->addYear(),
+            'one_time' => $request->has('one_time'),
+            'one_time_view' => $request->has('one_time_view'),
+            'viewed_once' => false,
+            'custom_link' => $request->input('custom_link'),
+            'share_link' => $shareLink
         ]);
 
-        $shareUrl = $customLink
-            ? url('/files/' . $customLink . '/download')
-            : route('files.download', $fileModel->id);
+        $shareUrl = $fileModel->custom_link
+            ? url('/files/' . $fileModel->custom_link . '/view')
+            : route('files.view', $fileModel->id);
 
         session()->flash('uploaded_file_link', $shareUrl);
         session()->flash('uploaded_file_name', $filename);
@@ -101,34 +91,91 @@ class FileController extends Controller
         return redirect()->back()->with('success', 'File berhasil diupload! Link share telah dibuat.');
     }
 
- public function download(Request $request, $fileIdOrCustomLink)
-{
-    $file = File::where('id', $fileIdOrCustomLink)
-                ->orWhere('custom_link', $fileIdOrCustomLink)
-                ->firstOrFail();
+    public function viewFile(Request $request, $fileIdOrCustomLink)
+    {
+        $file = File::where('id', $fileIdOrCustomLink)
+                    ->orWhere('custom_link', $fileIdOrCustomLink)
+                    ->firstOrFail();
 
-    if ($file->share_link === 'password') {
-        if (!$request->has('access_granted')) {
-            return view('files.password', ['file' => $file]);
+        if ($file->expired_at && now()->greaterThan($file->expired_at)) {
+            return response()->view('files.expired', [], 410);
         }
 
-        // masukan password 
+        if ($file->one_time_view && $file->viewed_once) {
+            return response()->view('files.expired', [], 410);
+        }
+
+        if ($file->one_time_view && !$file->viewed_once) {
+            $file->viewed_once = true;
+            $file->save();
+        }
+
+        if ($file->share_link === 'password') {
+            $attempts = session()->get('password_attempts_' . $file->id, 0);
+            $granted = session()->get('access_granted_' . $file->id, false);
+
+            if ($attempts >= 5) {
+                return response()->view('files.expired', [], 403);
+            }
+
+            if (!$granted) {
+                return view('files.password', ['file' => $file]);
+            }
+        }
+
+        return view('files.view', ['file' => $file]);
+    }
+
+    public function viewCustomLink($customLink)
+    {
+        return $this->viewFile(request(), $customLink);
+    }
+
+    public function checkPassword(Request $request, $id)
+    {
+        $file = File::findOrFail($id);
         $inputPassword = $request->input('password_input');
 
-
-        if ($inputPassword !== $file->password) {
-            return back()->withErrors(['password_input' => 'Password salah!']);
+        if (!$file->password || $inputPassword === $file->password) {
+            session()->put('access_granted_' . $file->id, true);
+            session()->forget('password_attempts_' . $file->id);
+            return redirect()->route('files.view', $file->custom_link ?? $file->id);
         }
+
+        $attempts = session()->get('password_attempts_' . $file->id, 0) + 1;
+        session()->put('password_attempts_' . $file->id, $attempts);
+
+        if ($attempts >= 5) {
+            return response()->view('files.expired', [], 403);
+        }
+
+        return back()->withErrors(['password_input' => 'Password salah'])->withInput();
     }
 
-    if (!file_exists(storage_path('app/public/' . $file->path))) {
-        abort(404, 'File tidak ditemukan.');
+    public function download(Request $request, $fileIdOrCustomLink)
+    {
+        $file = File::where('id', $fileIdOrCustomLink)
+                    ->orWhere('custom_link', $fileIdOrCustomLink)
+                    ->firstOrFail();
+
+        if ($file->expired_at && now()->greaterThan($file->expired_at)) {
+            return response()->view('files.expired', [], 410);
+        }
+
+        if ($file->one_time_view && $file->viewed_once) {
+            return response()->view('files.expired', [], 410);
+        }
+
+        if ($file->share_link === 'password' && !session()->get('access_granted_' . $file->id)) {
+            return redirect()->route('files.view', ['fileIdOrCustomLink' => $file->custom_link ?? $file->id]);
+        }
+
+        if (!file_exists(storage_path('app/public/' . $file->path))) {
+            abort(404, 'File tidak ditemukan.');
+        }
+
+        return response()->download(storage_path('app/public/' . $file->path), $file->filename);
     }
-
-    return response()->download(storage_path('app/public/' . $file->path), $file->filename);
-}
-
-
 
     public function share(Request $request, $fileId)
     {
@@ -148,23 +195,22 @@ class FileController extends Controller
             }
 
             $file->delete();
-
-            return redirect()->back()->with('success', 'File has been permanently deleted.');
+            return redirect()->back()->with('success', 'File berhasil dihapus permanen.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to delete file. Please try again.');
+            return redirect()->back()->with('error', 'Gagal menghapus file. Silakan coba lagi.');
         }
     }
 
-    public function checkPassword(Request $request, $id)
-{
-    $file = File::findOrFail($id);
+    // Tambahan: Hapus Semua File Permanen
+    public function deleteAllPermanent()
+    {
+        $files = File::all();
 
-    if ($request->input('password') === $file->password) {
-        // Redirect ke download dengan akses granted
-        return redirect()->route('files.download', ['fileIdOrCustomLink' => $file->custom_link ?? $file->id, 'access_granted' => true]);
+        try {
+            File::onlyTrashed()->forceDelete();
+        return redirect()->route('files.trash')->with('success', 'Semua file di Trash berhasil dihapus permanen.');
+    } catch (\Exception $e) {
+        return redirect()->route('files.trash')->with('error', 'Gagal menghapus semua file: ' . $e->getMessage());
     }
-
-    return back()->withErrors(['password' => 'Password salah'])->withInput();
 }
-
 }

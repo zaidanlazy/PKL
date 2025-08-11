@@ -1,5 +1,8 @@
 <?php
 
+// Tambahkan header untuk skip ngrok warning
+header('ngrok-skip-browser-warning: true');
+
 use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));

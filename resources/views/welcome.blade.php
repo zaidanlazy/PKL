@@ -7,37 +7,77 @@
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=roboto:300,400,500,600,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.bunny.net/css?family=poppins:500,600,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.bunny.net/css?family=inter:300,400,500,600&display=swap" rel="stylesheet">
 
     <style>
-        /* ===== Base Styles ===== */
         :root {
-            --primary: #0066CC;
-            --primary-light: #E6F2FF;
-            --primary-dark: #0052A3;
-            --secondary: #00A859;
-            --accent: #FFC107;
-            --danger: #E53935;
-            --warning: #F39C12;
-            --info: #17A2B8;
-            --text-primary: #2D3748;
-            --text-secondary: #718096;
-            --text-tertiary: #A0AEC0;
-            --bg-primary: #FFFFFF;
-            --bg-secondary: #F8FAFC;
-            --bg-tertiary: #EDF2F7;
-            --border: #E2E8F0;
-            --border-dark: #CBD5E0;
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.08);
-            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-            --radius-sm: 4px;
-            --radius-md: 8px;
-            --radius-lg: 12px;
-            --radius-xl: 16px;
-            --radius-full: 9999px;
-            --transition: all 0.2s ease-in-out;
+            /* Modern Color System */
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --primary-light: #f0f4ff;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+
+            /* Neutral Palette */
+            --white: #ffffff;
+            --gray-25: #fcfcfd;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+
+            /* Semantic Colors */
+            --surface: var(--white);
+            --surface-hover: var(--gray-25);
+            --border: var(--gray-200);
+            --border-light: var(--gray-100);
+            --text-primary: var(--gray-900);
+            --text-secondary: var(--gray-600);
+            --text-tertiary: var(--gray-500);
+
+            /* Shadows */
+            --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+
+            /* Spacing */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+
+            /* Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-full: 50rem;
+
+            /* Typography */
+            --text-xs: 0.75rem;
+            --text-sm: 0.875rem;
+            --text-base: 1rem;
+            --text-lg: 1.125rem;
+            --text-xl: 1.25rem;
+            --text-2xl: 1.5rem;
+
+            /* Transitions */
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-colors: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
         }
 
         * {
@@ -47,135 +87,57 @@
         }
 
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--bg-secondary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            background-color: var(--gray-50);
             color: var(--text-primary);
-            line-height: 1.6;
+            line-height: 1.5;
+            font-size: var(--text-base);
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        
-        .logo-animation {
-            width: 120px;
-            height: 120px;
-            position: relative;
-            margin-bottom: 24px;
-        }
-
-        .logo-circle {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 4px solid rgba(255, 255, 255, 0.2);
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        .logo-inner {
-            position: absolute;
-            width: 80%;
-            height: 80%;
-            top: 10%;
-            left: 10%;
-            border-radius: var(--radius-full);
-            background-color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-        }
-
-        .logo-inner img {
-            width: 60%;
-            height: auto;
-            transition: var(--transition);
-        }
-
-        .loading-container {
-            width: 160px;
-            height: 4px;
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: var(--radius-full);
-            overflow: hidden;
-            margin-top: 24px;
-        }
-
-        .loading-bar {
-            height: 100%;
-            width: 0;
-            background-color: white;
-            animation: loading 2s ease-in-out forwards;
-        }
-
-        .loading-text {
-            color: white;
-            font-size: 18px;
-            font-weight: 500;
-            margin-top: 16px;
-            font-family: 'Poppins', sans-serif;
-            letter-spacing: 0.5px;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.8; }
-        }
-
-        @keyframes loading {
-            0% { width: 0; }
-            100% { width: 100%; }
-        }
-
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; visibility: hidden; }
-        }
-
-        /* ===== Header Styles ===== */
+        /* Header */
         .app-header {
-            height: 70px;
-            background-color: var(--bg-primary);
-            box-shadow: var(--shadow-sm);
+            background-color: var(--surface);
+            border-bottom: 1px solid var(--border-light);
+            backdrop-filter: blur(8px);
             position: sticky;
             top: 0;
-            z-index: 100;
-            display: flex;
-            justify-content: center;
-            border-bottom: 1px solid var(--border);
+            z-index: 50;
         }
 
         .header-container {
-            width: 100%;
-            max-width: 1400px;
-            height: 100%;
-            padding: 0 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-6);
+            height: 4rem;
             display: flex;
             align-items: center;
-            justify-content: space-between;
         }
 
         .branding {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: var(--space-3);
             text-decoration: none;
-            transition: var(--transition);
+            transition: var(--transition-colors);
         }
 
         .branding:hover {
-            opacity: 0.9;
+            opacity: 0.8;
         }
 
         .logo-wrapper {
-            width: 40px;
-            height: 40px;
-            border-radius: var(--radius-md);
-            background-color: white;
+            width: 2rem;
+            height: 2rem;
             display: flex;
-            justify-content: center;
             align-items: center;
-            overflow: hidden;
+            justify-content: center;
+            background-color: var(--white);
+            border-radius: var(--radius-md);
             box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+            overflow: hidden;
         }
 
         .logo-wrapper img {
@@ -185,47 +147,63 @@
         }
 
         .app-name {
-            font-size: 20px;
+            font-size: var(--text-lg);
             font-weight: 600;
-            color: var(--primary);
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
+            color: var(--text-primary);
+            letter-spacing: -0.025em;
         }
 
         .app-name span {
-            font-weight: 400;
             color: var(--text-secondary);
+            font-weight: 400;
         }
 
-        /* ===== Main Content Styles ===== */
+        /* Main Content */
         .main-content {
-            max-width: 1400px;
-            margin: 24px auto;
-            padding: 0 24px;
-            padding-bottom: 100px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-8) var(--space-6) var(--space-16);
         }
 
         .content-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
+            margin-bottom: var(--space-8);
         }
 
         .page-title {
-            font-size: 24px;
+            font-size: var(--text-2xl);
             font-weight: 600;
             color: var(--text-primary);
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
+            letter-spacing: -0.025em;
         }
 
-        /* ===== File Table Styles ===== */
-        .file-container {
-            background-color: var(--bg-primary);
+        /* Alert */
+        .alert {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-3);
+            padding: var(--space-4);
+            margin-bottom: var(--space-6);
+            background-color: #ecfdf5;
+            border: 1px solid #a7f3d0;
             border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-sm);
+            font-size: var(--text-sm);
+            color: #065f46;
+        }
+
+        .alert svg {
+            flex-shrink: 0;
+            width: 1.25rem;
+            height: 1.25rem;
+            color: var(--success);
+        }
+
+        /* File Container */
+        .file-container {
+            background-color: var(--surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-xl);
             overflow: hidden;
+            box-shadow: var(--shadow-xs);
         }
 
         .file-table {
@@ -234,183 +212,150 @@
         }
 
         .file-table thead {
-            background-color: var(--bg-secondary);
+            background-color: var(--gray-25);
         }
 
         .file-table th {
-            padding: 14px 16px;
+            padding: var(--space-4) var(--space-6);
             text-align: left;
+            font-size: var(--text-xs);
             font-weight: 500;
-            color: var(--text-secondary);
-            font-size: 13px;
+            color: var(--text-tertiary);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .file-table th:first-child {
-            padding-left: 24px;
-            border-top-left-radius: var(--radius-lg);
-        }
-
-        .file-table th:last-child {
-            padding-right: 24px;
-            border-top-right-radius: var(--radius-lg);
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--border-light);
         }
 
         .file-table td {
-            padding: 14px 16px;
-            border-bottom: 1px solid var(--border);
-            vertical-align: middle;
+            padding: var(--space-5) var(--space-6);
+            border-bottom: 1px solid var(--border-light);
+            font-size: var(--text-sm);
         }
 
-        .file-table td:first-child {
-            padding-left: 24px;
-        }
-
-        .file-table td:last-child {
-            padding-right: 24px;
+        .file-table tr:hover {
+            background-color: var(--surface-hover);
         }
 
         .file-table tr:last-child td {
             border-bottom: none;
         }
 
-        .file-table tr:hover {
-            background-color: var(--bg-tertiary);
-        }
-
+        /* File Name */
         .file-name {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: var(--space-4);
         }
 
         .file-icon-container {
-            width: 40px;
-            height: 40px;
-            border-radius: var(--radius-md);
-            background-color: var(--bg-secondary);
+            width: 2.5rem;
+            height: 2.5rem;
+            background-color: var(--primary-light);
+            border-radius: var(--radius-lg);
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .file-icon {
-            width: 20px;
-            height: 20px;
+            width: 1.25rem;
+            height: 1.25rem;
             color: var(--primary);
+        }
+
+        .file-info {
+            min-width: 0;
         }
 
         .file-title {
             font-weight: 500;
             color: var(--text-primary);
+            margin-bottom: 1px;
         }
 
         .file-path {
-            font-size: 12px;
+            font-size: var(--text-xs);
             color: var(--text-tertiary);
-            margin-top: 2px;
         }
 
-        .file-owner {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .owner-avatar {
-            width: 28px;
-            height: 28px;
-            border-radius: var(--radius-full);
-            background-color: var(--primary-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--primary);
-        }
-
-        .file-modified, .file-size {
+        /* File Details */
+        .file-modified,
+        .file-size {
             color: var(--text-secondary);
-            font-size: 14px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* File Actions */
+        .file-actions {
+            display: flex;
+            gap: var(--space-2);
         }
 
         .file-action {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-3);
             color: var(--primary);
             text-decoration: none;
+            font-size: var(--text-sm);
             font-weight: 500;
-            font-size: 14px;
-            transition: var(--transition);
+            border-radius: var(--radius-md);
+            transition: var(--transition-colors);
         }
 
         .file-action:hover {
-            text-decoration: underline;
-            opacity: 0.9;
+            background-color: var(--primary-light);
         }
 
-        /* ===== Empty State ===== */
+        .file-action-icon {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        /* Empty State */
         .empty-state {
-            padding: 48px 24px;
+            padding: var(--space-16) var(--space-8);
             text-align: center;
         }
 
         .empty-state-icon {
-            width: 80px;
-            height: 80px;
-            color: var(--text-tertiary);
-            margin-bottom: 16px;
+            width: 4rem;
+            height: 4rem;
+            color: var(--gray-300);
+            margin: 0 auto var(--space-6);
         }
 
         .empty-state-title {
-            font-size: 18px;
+            font-size: var(--text-lg);
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 8px;
+            margin-bottom: var(--space-2);
         }
 
         .empty-state-description {
             color: var(--text-secondary);
-            max-width: 400px;
-            margin: 0 auto 16px;
+            max-width: 28rem;
+            margin: 0 auto var(--space-6);
         }
 
-        /* ===== Success Message ===== */
-        .alert-success {
-            background-color: #E6FFFA;
-            border-left: 4px solid #38B2AC;
-            color: #234E52;
-            padding: 12px 16px;
-            border-radius: var(--radius-md);
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .alert-success svg {
-            width: 20px;
-            height: 20px;
-            color: #38B2AC;
-        }
-
-        /* ===== Floating Action Button ===== */
+        /* Floating Action Button */
         .fab-container {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 99;
+            bottom: var(--space-8);
+            right: var(--space-8);
+            z-index: 40;
         }
 
         .fab {
-            width: 56px;
-            height: 56px;
+            width: 3.5rem;
+            height: 3.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
             border-radius: var(--radius-full);
-            background-color: var(--primary);
-            color: white;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             box-shadow: var(--shadow-lg);
             cursor: pointer;
             transition: var(--transition);
@@ -418,114 +363,125 @@
         }
 
         .fab:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 102, 204, 0.2);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 20px 25px rgba(59, 130, 246, 0.25), 0 10px 10px rgba(59, 130, 246, 0.1);
         }
 
         .fab-icon {
-            font-size: 24px;
+            font-size: 1.5rem;
+            color: var(--white);
             font-weight: 300;
+            transition: var(--transition);
+            line-height: 1;
+        }
+
+        .fab.active .fab-icon {
+            transform: rotate(45deg);
         }
 
         .fab-options {
             position: absolute;
-            bottom: 70px;
+            bottom: 4.5rem;
             right: 0;
-            width: 220px;
-            background-color: white;
-            border-radius: var(--radius-md);
+            width: 12rem;
+            background-color: var(--surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-xl);
             box-shadow: var(--shadow-lg);
             overflow: hidden;
             opacity: 0;
             visibility: hidden;
-            transform: translateY(10px);
+            transform: translateY(0.5rem) scale(0.95);
             transition: var(--transition);
         }
 
-        .fab-options.active {
+        .fab.active .fab-options {
             opacity: 1;
             visibility: visible;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
         }
 
         .fab-option {
-            padding: 12px 16px;
+            padding: var(--space-4);
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: var(--space-3);
             cursor: pointer;
-            transition: var(--transition);
+            transition: var(--transition-colors);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .fab-option:last-child {
+            border-bottom: none;
         }
 
         .fab-option:hover {
-            background-color: var(--bg-secondary);
+            background-color: var(--surface-hover);
         }
 
         .fab-option-icon {
-            width: 20px;
-            height: 20px;
-            color: var(--primary);
+            width: 1.25rem;
+            height: 1.25rem;
+            color: var(--text-secondary);
         }
 
         .fab-option-text {
-            font-size: 14px;
+            font-size: var(--text-sm);
             color: var(--text-primary);
             font-weight: 500;
         }
 
-        /* ===== Responsive Styles ===== */
+        /* Responsive */
         @media (max-width: 768px) {
-            .header-container {
-                padding: 0 16px;
+            .header-container,
+            .main-content {
+                padding-left: var(--space-4);
+                padding-right: var(--space-4);
             }
-            
-            .file-table th, .file-table td {
-                padding: 12px;
+
+            .file-table th,
+            .file-table td {
+                padding: var(--space-3) var(--space-4);
             }
-            
-            .file-table th:first-child, .file-table td:first-child {
-                padding-left: 16px;
-            }
-            
-            .file-table th:last-child, .file-table td:last-child {
-                padding-right: 16px;
-            }
-            
+
             .file-modified {
                 display: none;
             }
-            
+
             .fab-container {
-                bottom: 20px;
-                right: 20px;
+                bottom: var(--space-6);
+                right: var(--space-6);
+            }
+
+            .fab-options {
+                right: -2rem;
             }
         }
 
-        @media (max-width: 576px) {
-            .app-name {
-                font-size: 18px;
-            }
-            
-            .file-owner-name {
-                display: none;
-            }
-            
+        @media (max-width: 640px) {
             .file-size {
-                font-size: 12px;
+                font-size: var(--text-xs);
+            }
+
+            .file-actions {
+                justify-content: flex-end;
+            }
+
+            .empty-state {
+                padding: var(--space-12) var(--space-4);
             }
         }
     </style>
 </head>
 <body>
-    <!-- Main Header -->
+    <!-- Header -->
     <header class="app-header">
         <div class="header-container">
             <a href="/" class="branding">
                 <div class="logo-wrapper">
-                    <img src="{{ asset('images/badaklng.png') }}" alt="Badak LNG Logo">
+                    <img src="{{ asset('images/badaklng.png') }}" alt="Badak LNG">
                 </div>
-                <h1 class="app-name">Badak <span>LNG</span></h1>
+                <h1 class="app-name">Badak<span>LNG</span></h1>
             </a>
         </div>
     </header>
@@ -537,9 +493,9 @@
         </div>
 
         @if(session('success'))
-            <div class="alert-success">
+            <div class="alert">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                 </svg>
                 <span>{{ session('success') }}</span>
             </div>
@@ -550,10 +506,8 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Owner</th>
-                        <th>Last Modified</th>
-                        <th>File Size</th>
-                        <th>Action</th>
+                        <th>Modified</th>
+                        <th>Size</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -562,44 +516,33 @@
                             <td>
                                 <div class="file-name">
                                     <div class="file-icon-container">
-                                        <svg class="file-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        <svg class="file-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                                         </svg>
                                     </div>
-                                    <div>
+                                    <div class="file-info">
                                         <div class="file-title">{{ $file->filename ?? 'Unnamed File' }}</div>
-                                        <div class="file-path">/My Files</div>
+                                        <div class="file-path">My Files</div>
                                     </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="file-owner">
-                                    <div class="owner-avatar">ME</div>
-                                    <span class="file-owner-name">me</span>
                                 </div>
                             </td>
                             <td class="file-modified">{{ \Carbon\Carbon::parse($file->created_at)->format('M d, Y') }}</td>
                             <td class="file-size">
                                 @if($file->path && \Storage::disk('public')->exists($file->path))
-                                    {{ number_format(Storage::disk('public')->size($file->path) / 1024, 2) }} KB
+                                    {{ number_format(Storage::disk('public')->size($file->path) / 1024, 1) }} KB
                                 @else
-                                    -
+                                    —
                                 @endif
-                            </td>
-                            <td>
-                                <a href="{{ route('files.download', $file->id) }}" class="file-action">
-                                    Download
-                                </a>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="empty-state">
-                                <svg class="empty-state-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                            <td colspan="4" class="empty-state">
+                                <svg class="empty-state-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
                                 </svg>
-                                <h3 class="empty-state-title">No files found</h3>
-                                <p class="empty-state-description">Upload your first file by clicking the + button below</p>
+                                <h3 class="empty-state-title">No files yet</h3>
+                                <p class="empty-state-description">Upload your first file to get started with file management</p>
                             </td>
                         </tr>
                     @endforelse
@@ -612,22 +555,22 @@
     <div class="fab-container">
         <div class="fab" id="fab">
             <span class="fab-icon">+</span>
-            <div class="fab-options" id="fab-options">
+            <div class="fab-options">
                 <div class="fab-option" onclick="uploadFile()">
-                    <svg class="fab-option-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    <svg class="fab-option-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
                     </svg>
-                    <span class="fab-option-text">Upload File</span>
+                    <span class="fab-option-text">Share File</span>
                 </div>
                 <div class="fab-option" onclick="saveFile()">
-                    <svg class="fab-option-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                    <svg class="fab-option-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
                     </svg>
                     <span class="fab-option-text">Save File</span>
                 </div>
                 <div class="fab-option" onclick="openTrash()">
-                    <svg class="fab-option-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    <svg class="fab-option-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                     </svg>
                     <span class="fab-option-text">Trash</span>
                 </div>
@@ -636,40 +579,27 @@
     </div>
 
     <script>
-        // Remove splash screen after animation completes
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                const splash = document.querySelector('.splash-screen');
-                if (splash) {
-                    splash.addEventListener('animationend', () => {
-                        splash.remove();
-                    });
-                }
-            }, 3000);
+        // FAB functionality
+        const fab = document.getElementById('fab');
 
-            // Floating Action Button functionality
-            const fab = document.getElementById('fab');
-            const fabOptions = document.getElementById('fab-options');
-
-            fab.addEventListener('click', (e) => {
-                e.stopPropagation();
-                fabOptions.classList.toggle('active');
-            });
-
-            // Close FAB options when clicking outside
-            document.addEventListener('click', () => {
-                fabOptions.classList.remove('active');
-            });
+        fab.addEventListener('click', (e) => {
+            e.stopPropagation();
+            fab.classList.toggle('active');
         });
 
+        document.addEventListener('click', () => {
+            fab.classList.remove('active');
+        });
+
+        // Navigation functions
         function uploadFile() {
             window.location.href = '{{ route("upload") }}';
         }
-        
+
         function saveFile() {
             window.location.href = '{{ route("save-file") }}';
         }
-          
+
         function openTrash() {
             window.location.href = '{{ route("trash") }}';
         }
